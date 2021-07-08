@@ -1,4 +1,3 @@
-
 init();
 autoRefresh();
 
@@ -12,7 +11,7 @@ function init() {
 
 // timeConverter(assets.timestamp)
 
-function autoRefresh() { //every 1 min
+function autoRefresh() { // every 1 min
     setInterval( () => {
         $('#tableContainer').empty();
         init();
@@ -93,7 +92,35 @@ function getData(assets) {
     }
 
     addEventListenerToName()
+
+    addEventListenerToSearchBar()
+
 }
+
+// add event listener to search bar so that when user starts typing text the table will be filtered
+function addEventListenerToSearchBar() {
+    $('#user_input').keyup(searchTable)
+}
+
+// call back function search table
+function searchTable() {
+    var input = document.getElementById('user_input')
+    var filter = input.value.toUpperCase();
+    var table = document.getElementById("table_id");
+    var tr = table.getElementsByTagName("tr");
+    for (var k = 0; k < tr.length; k++) {
+      var td = tr[k].getElementsByTagName("td")[1]; // the name array
+      if (td) {
+        var txtValue = td.textContent || td.innerText;
+        if (txtValue.toUpperCase().indexOf(filter) > -1) { // use indexOf method to check if the text input can be found in the name array
+          tr[k].style.display = ""; // display if found
+        } else {
+          tr[k].style.display = "none"; // hide if not found
+        }
+      }       
+    }
+}
+
 
 // Add event listener to each name
 function addEventListenerToName() {
