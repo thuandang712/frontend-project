@@ -1,0 +1,23 @@
+.name:hover {
+    cursor:pointer
+}
+
+#search_btn:hover {
+    cursor:pointer
+}
+
+tbody tr {
+    background-color: #ffffff;
+}
+tbody tr.selected {
+    background-color: #B0BED9;
+  }
+
+tbody th,
+tbody td {
+  padding: 8px 10px;
+}
+th,
+td {
+  box-sizing: content-box;
+}
