@@ -1,7 +1,6 @@
 init();
 autoRefresh();
 
-
 function init() {
     createTable()
     createTableHeadAndBody();
@@ -38,6 +37,7 @@ function createTableHeadAndBody() {
 // Create table head attribute
 function createTableHeadAttribute() {
     var tr_head = $('<tr></tr>')
+    tr_head.addClass('row')
     $('#tableHead').append(tr_head)
     var arrayAttribute = [`#`, `Name`, `Price`, `Change`, `Volume (24h)`, `Market cap`];
     arrayAttribute.forEach( (atr) => {
@@ -73,6 +73,7 @@ function getData(assets) {
         // append data to table row
         $(tableRow).append($('<td>').addClass('rank').text(`${currentAsset.rank}`))
         $(tableRow).append($('<td>').addClass('name').attr('id',`${currentAsset.id}`).text(`${currentAsset.name} ${currentAsset.symbol}`))
+        //$(tableRow).append($('<td>').addClass('symbol').text(`${currentAsset.symbol}`))
         $(tableRow).append($('<td>').addClass('price').text(`$${currentPrice}`))
         $(tableRow).append($('<td>').addClass('percentChange').text(`${percentChange}%`))
 
@@ -92,7 +93,6 @@ function getData(assets) {
     }
 
     addEventListenerToName()
-
     addEventListenerToSearchBar()
 
 }
@@ -121,7 +121,6 @@ function searchTable() {
     }
 }
 
-
 // Add event listener to each name
 function addEventListenerToName() {
     var nameArr = document.getElementsByClassName('name') // returns an array-like with class of 'name'
@@ -141,9 +140,7 @@ function addEventListenerToName() {
 function goToAssetProfile(e) {
     createHomeButton()
     addEventListenerToHomeButton()
-    $('#assetContainer').show()
-    $('#tableContainer').hide()
-
+    hide();
     $.get(`https://api.coincap.io/v2/assets/${e.target.id}`, (data) => { // data is an obj of objs
         // console.log(data)
         let obj = data.data
@@ -177,9 +174,22 @@ function createHomeButton() {
 
 // add event listener to home button
 function addEventListenerToHomeButton() {
-    $('#homeBtn').click( () => {
-        $('#tableContainer').show()
-        $('#assetContainer').hide()
-        $('#assetContainer').empty()
-    })
+    $('#homeBtn').click(show)
+}
+
+function show() {
+    $('h1').show()
+    $('h2').show()
+    $('#user_input').show()
+    $('#tableContainer').show()
+    $('#assetContainer').hide()
+    $('#assetContainer').empty()
+}
+
+function hide() {
+    $('#assetContainer').show()
+    $('#tableContainer').hide()
+    $('h1').hide()
+    $('h2').hide()
+    $('#user_input').hide()
 }
