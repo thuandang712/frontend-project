@@ -19,7 +19,7 @@ function autoRefresh() { // every 1 min
 function createTable() {
     var table = $('<table></table>')
     table.attr('id', 'table_id')
-    var tableCaption = $('<caption></caption>')
+    var tableCaption = $('<caption></caption>') // this will contain and handle time update
     tableCaption.attr('id', 'caption')
     table.append(tableCaption)
     $('#tableContainer').append(table)
@@ -40,8 +40,8 @@ function createTableHeadAttribute() {
     var tr_head = $('<tr></tr>')
     tr_head.addClass('row')
     $('#tableHead').append(tr_head)
-    var arrayAttribute = [`#`, `Name`, `Price`, `Change`, `Volume (24h)`, `Market cap`];
-    arrayAttribute.forEach( (atr) => {
+    var headArrAttr = [`#`, `Name`, `Price`, `Change`, `Volume (24h)`, `Market cap`];
+    headArrAttr.forEach( (atr) => {
         $('thead tr:first-child').append('<th>' + atr + '</th>') // get table head's first tr child and append each atr in the array
     });
 }
@@ -74,7 +74,6 @@ function getData(assets) {
         // append data to table row
         $(tableRow).append($('<td>').addClass('rank').text(`${currentAsset.rank}`))
         $(tableRow).append($('<td>').addClass('name').attr('id',`${currentAsset.id}`).text(`${currentAsset.name} ${currentAsset.symbol}`))
-        //$(tableRow).append($('<td>').addClass('symbol').text(`${currentAsset.symbol}`))
         $(tableRow).append($('<td>').addClass('price').text(`$${currentPrice}`))
         $(tableRow).append($('<td>').addClass('percentChange').text(`${percentChange}%`))
 
@@ -93,11 +92,9 @@ function getData(assets) {
         $('#table_id').append(tableRow)
     }
 
-    addEventListenerToName()
-    addEventListenerToSearchBar()
-    
-    // add time handler
-    timeConverter(assets.timestamp)
+    addEventListenerToName(); // click event on name
+    addEventListenerToSearchBar(); // search function to filter table
+    timeConverter(assets.timestamp); // add time handler
 }
 
 // add event listener to search bar so that when user starts typing text the table will be filtered
@@ -130,13 +127,6 @@ function addEventListenerToName() {
     for (var j = 0; j < nameArr.length; j++) {
         nameArr[j].addEventListener('click', goToAssetProfile)
     }
-    //????????????????????? // somehow jquery is not working on this // ?????????????????????????
-    // var nameArr = $('.name')
-    // nameArr.each( (i) => {
-    //     $(this).click( () => {
-    //        console.log('working'+ i)
-    //    })
-    // })
 }
 
 // handle click event on name
@@ -145,8 +135,7 @@ function goToAssetProfile(e) {
     addEventListenerToHomeButton()
     hide();
     $.get(`https://api.coincap.io/v2/assets/${e.target.id}`, (data) => { // data is an obj of objs
-        // console.log(data)
-        let obj = data.data
+        var obj = data.data
         for (var key in obj) {
             var div = $('<div></div>')
             div.addClass('assetProfile')
@@ -167,7 +156,6 @@ function timeConverter(UNIX_time) { // UNIX_time is already in milisecond
     var minutes = '0' + fullDate.getMinutes();
     var seconds = '0' + fullDate.getSeconds();
     var formatted_time = `${date} ${month} ${year} ${hours}:${minutes.substr(-2)}:${seconds.substr(-2)}`;
-    //return formatted_time;
     //target caption id
     $('#caption').text(`Last updated ${formatted_time}`)
 }

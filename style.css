@@ -37,6 +37,7 @@ h2 {
     font-size: 3rem;
     margin-left: 75px;
     margin-bottom: 10px;
+    color:black;
 }
 
 #user_input { /* search bar */
@@ -113,6 +114,7 @@ h2 {
     font-family: 'Roboto', sans-serif;
     font-size: 15px;
     margin: 10px 50px;
+    padding: 5px;
     color: white
 }
 
