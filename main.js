@@ -8,8 +8,6 @@ function init() {
     createTableRowAndData();
 }
 
-// timeConverter(assets.timestamp)
-
 function autoRefresh() { // every 1 min
     setInterval( () => {
         $('#tableContainer').empty();
@@ -21,6 +19,9 @@ function autoRefresh() { // every 1 min
 function createTable() {
     var table = $('<table></table>')
     table.attr('id', 'table_id')
+    var tableCaption = $('<caption></caption>')
+    tableCaption.attr('id', 'caption')
+    table.append(tableCaption)
     $('#tableContainer').append(table)
 }
 
@@ -94,7 +95,9 @@ function getData(assets) {
 
     addEventListenerToName()
     addEventListenerToSearchBar()
-
+    
+    // add time handler
+    timeConverter(assets.timestamp)
 }
 
 // add event listener to search bar so that when user starts typing text the table will be filtered
@@ -156,12 +159,17 @@ function goToAssetProfile(e) {
 // convert UNIX time to hh:mm:ss format
 function timeConverter(UNIX_time) { // UNIX_time is already in milisecond
     // time manipulation
-    var date = new Date(UNIX_time) 
-    var hours = date.getHours();
-    var minutes = '0' + date.getMinutes();
-    var seconds = '0' + date.getSeconds();
-    var formatted_time = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
-    return formatted_time;
+    var fullDate = new Date(UNIX_time) 
+    var year = fullDate.getFullYear();
+    var month = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'][fullDate.getMonth()];
+    var date = fullDate.getDate();
+    var hours = fullDate.getHours();
+    var minutes = '0' + fullDate.getMinutes();
+    var seconds = '0' + fullDate.getSeconds();
+    var formatted_time = `${date} ${month} ${year} ${hours}:${minutes.substr(-2)}:${seconds.substr(-2)}`;
+    //return formatted_time;
+    //target caption id
+    $('#caption').text(`Last updated ${formatted_time}`)
 }
 
 // create home button
@@ -170,7 +178,7 @@ function createHomeButton() {
     button.attr('id', 'homeBtn')
     button.text("Back")
     $("#assetContainer").append(button)
-  }
+}
 
 // add event listener to home button
 function addEventListenerToHomeButton() {
